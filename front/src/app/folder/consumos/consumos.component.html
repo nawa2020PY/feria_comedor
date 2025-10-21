@@ -1,0 +1,106 @@
+<ion-header [translucent]="true" style="background-color: white !important;">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title size="large">Consumos</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" >
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="safe-fab">
+    <ion-fab-button (click)="create()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- <ion-header collapse="condense" style="margin-top:32px">
+    <ion-toolbar>
+    </ion-toolbar>
+  </ion-header> -->
+  <ion-searchbar #searchInput placeholder="Buscar"
+  enterkeyhint="search" inputmode="search" type="text" [(ngModel)]="searchValue"
+  (ionChange)="search(searchInput.value)">
+  </ion-searchbar>
+  <!-- <ion-item lines="none">
+      <ion-select #searchInput class="filter-select"  (ionChange)="search(searchInput.value)"
+          okText="Confirmar" cancelText="Cancelar" [(ngModel)]="searchType"
+          [interfaceOptions]="{ header: 'Opciones de Busqueda' }">
+          <ion-select-option [value]="'nroDocumento'" class="filter-option">
+              Buscar por Cédula
+          </ion-select-option>
+          <ion-select-option [value]="'nombre'" class="filter-option">
+            Buscar por Nombre
+        </ion-select-option>
+      </ion-select>
+  </ion-item> -->
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)" >
+    <ion-refresher-content
+   
+      pullingIcon="arrow-down-circle-outline"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+  <!-- Buscar por Cédula -->
+  <!-- <ion-item>
+    <ion-label position="stacked">Filtrar por Fecha Desde</ion-label>
+    <ion-datetime [(ngModel)]="fechaDesde" displayFormat="DD/MM/YYYY" (ionChange)="filterByDate()" firstDayOfWeek="1" presentation="date" preferWheel="false"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Filtrar por Fecha Hasta</ion-label>
+    <ion-datetime [(ngModel)]="fechaHasta" displayFormat="DD/MM/YYYY" (ionChange)="filterByDate()" firstDayOfWeek="1" presentation="date" preferWheel="false"></ion-datetime>
+  </ion-item> -->
+  <ion-item  *ngIf="authInfo != undefined && authInfo.TipoUsuario != 2">
+    <ion-label position="stacked">Filtrar por Comedor</ion-label>
+    <ion-select [(ngModel)]="selectedComedor" (ionChange)="filterByComedor()" interface="popover">
+      <ion-select-option value="">Todos</ion-select-option>
+      <ion-select-option *ngFor="let comedor of comedores" [value]="comedor.IDComedor">
+        {{ comedor.Nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-list>
+    <ion-card *ngFor="let item of data">
+      <ion-card-header>
+        <!-- <ion-card-title>{{ item.NombreEmpleado }}</ion-card-title> -->
+        <ion-card-subtitle>{{ item.NombreComedor }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let key of keysToShow">
+          <p>
+            <ng-container *ngIf="key == 'IDConsumo'">
+              <strong>Nro. :</strong> {{ item[key] }}
+            </ng-container>
+            <ng-container *ngIf="key == 'FechaTransaccion'">
+              <strong>Fecha:</strong> {{ getOnlyDate(item[key]) }}
+            </ng-container>
+            <ng-container *ngIf="key == 'Monto'">
+              <strong>Monto:</strong> {{ ' ' + (item[key] | currency: 'PYG': 'symbol-narrow': '1.0-0') }}
+            </ng-container>
+            <ng-container *ngIf="key == 'Anulado'">
+              <strong>Anulado:</strong> {{ item[key] == true ? 'Sí' : 'No' }}
+            </ng-container>
+            <ng-container *ngIf="key == 'NroDocumento'">
+              <strong>Cédula:</strong> {{ item[key] }}
+            </ng-container>
+            <ng-container *ngIf="key == 'NombreEmpleado'">
+              <strong>Empleado:</strong> {{ item[key] }}
+            </ng-container>
+            <ng-container *ngIf="key == 'NombreComedor'">
+              <strong>Comedor:</strong> {{ item[key] }}
+            </ng-container>            <!-- tipo consumo 1 == En Local, tipo Consumo == 2 == Delivery -->
+            <ng-container *ngIf="key == 'TipoConsumo'">
+              <strong>Tipo Consumo:</strong> {{ item[key] !== 2 ? 'En Local' : 'Delivery' }}
+            </ng-container>
+          </p>
+        </div>
+        <p style="margin-top:16px">
+          <ion-button (click)="edit(item.IDConsumo)" expand="block" fill="outline" size="small" style="margin-top:16px;"><ion-icon name="information-circle-outline"></ion-icon><strong> Ver detalle</strong></ion-button>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  
+</ion-content>
+

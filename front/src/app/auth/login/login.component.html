@@ -1,0 +1,85 @@
+<ion-app>
+  <ion-content class="screen" color="primary" >
+      <ion-row class="screen-row" *ngIf="screen == 'signin'">
+          <ion-card class="login-card ion-padding">
+              <ion-toolbar>
+                  <ion-buttons slot="start">
+                      <ion-button fill="clear" disabled>
+                          <ion-icon color="primary" name=""></ion-icon>
+                      </ion-button>
+                  </ion-buttons>
+                  <ion-buttons slot="end">
+                      <ion-button fill="clear" (click)="change('hostAndPort')" >
+                              <ion-icon name="settings-outline"></ion-icon>
+                      </ion-button>
+                  </ion-buttons>
+              </ion-toolbar>
+              <ion-card-header class="ion-text-center">
+                  <div class="container w-100 image-container">
+                      <ion-img class="image" src="./assets/feria-home.png"></ion-img>
+                  </div>
+              </ion-card-header>
+              <ion-card-content>
+                  <form [formGroup]="formData">
+                      <ion-item class="ion-align-items-center">
+                          <ion-icon slot="start" name="person-outline"></ion-icon>
+                          <div style="display: flex; justify-content: start; width: 100%;">
+                              <ion-label position="floating" >Usuario</ion-label>
+                          </div>
+                          <ion-input type="text" formControlName="usuario" type="url" style="margin-top:20px" ></ion-input>
+                      </ion-item>
+                      <br>
+                      <ion-item class="ion-align-items-center">
+                          <ion-icon slot="start" name="key-outline"></ion-icon>
+                          <div style="display: flex; justify-content: start; width: 100%;">
+                              <ion-label position="floating" >Contraseña</ion-label>
+                          </div>
+                          <ion-input formControlName="password" [type]="passType"  style="margin-top:20px" (keyup.enter)="login()"></ion-input>
+                          <span slot="end" *ngIf="showPass" (click)="changeShowPass(false)" class="center-icon-passw">
+                            <ion-icon name="eye-outline"></ion-icon> 
+                          </span>
+                          <span slot="end" *ngIf="!showPass" (click)="changeShowPass(true)" class="center-icon-passw">
+                            <ion-icon name="eye-off-outline"></ion-icon>
+                          </span>
+                      </ion-item>
+                      <br>
+                      <ion-button type="button" color="light" expand="block" color="primary" (click)="login()" [disabled]="loadingLogin">
+                          <span *ngIf="!loadingLogin">Ingresar</span>
+                          <ion-spinner *ngIf="loadingLogin"></ion-spinner>
+                      </ion-button>
+                  </form>
+              </ion-card-content>
+          </ion-card>
+      </ion-row>
+      <ion-row class="screen-row" *ngIf="screen == 'hostAndPort'">
+        <div class="container" >
+          <h1 class="heading">Editar Puerto y Host<br><br></h1>
+          <!-- <p class="para">Sign up to get started!</p> -->
+          <form [formGroup]="formDataHostAndPort" style="background-color: white; padding: 16px; border-radius: 16px;">
+            <ion-item lines="none" class="ion-align-items-center">
+              <fieldset  class="input-item">
+                <legend>Dirección IP</legend> 
+                <ion-input formControlName="host" type="text" placeholder="Ejemplo: 192.168.0.100"></ion-input>
+              </fieldset>
+            </ion-item>
+            <ion-item lines="none" class="ion-align-items-center">
+              <fieldset  class="input-item">
+                <legend>Puerto</legend> 
+                <ion-input formControlName="port" type="text" placeholder="Ejemplo: 5432"></ion-input>
+              </fieldset>
+            </ion-item>
+            <ion-button style="margin-top:8px" class="login-button" (click)="registerHostAndPort()" expand="block">Actualizar</ion-button>
+          </form>
+
+          <p class="signup-text">Volver a &nbsp;<span (click)="change('signin')">Iniciar Sesión</span></p>
+
+        </div>
+      </ion-row>
+      <ion-fab vertical="bottom" horizontal="start" slot="fixed" class="our-text">
+          Desarrollado por Nawa
+      </ion-fab>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+          1.10
+      </ion-fab>
+  </ion-content>
+</ion-app>
