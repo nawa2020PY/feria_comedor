@@ -1,0 +1,74 @@
+<ion-app >
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content >
+        <ion-list id="inbox-list">
+          <ng-container *ngIf="authInfo != undefined">
+            <ion-list-header>{{authInfo.Nombre}}</ion-list-header>
+            <ion-item>
+              <ion-note style="margin-top: 16px;">{{authInfo.Usuario}}</ion-note>
+            </ion-item>
+            <ion-item>
+              <ion-label style="margin-top: 8px;">Tipo de Usuario: {{authInfo.TipoUsuario == 2 ? 'Comedor' : 'RRHH' }}</ion-label>
+            </ion-item>
+          </ng-container>
+
+          @for (p of appPages; track p; let i = $index) {
+            <ion-menu-toggle auto-hide="false">
+              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+                <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          }
+        </ion-list>
+
+        <ion-list id="labels-list">
+          <ion-list-header>Acciones</ion-list-header>
+          <ion-item lines="none" (click)="showModalExport()">
+            <ion-icon aria-hidden="true" slot="start" ios="download" md="download"></ion-icon>
+            <ion-label>Exportar Consumos</ion-label>
+          </ion-item>
+          <ion-item lines="none"  (click)="signOut()">
+            <ion-icon aria-hidden="true" slot="start" ios="log-out" md="log-out"></ion-icon>
+            <ion-label >Cerrar Sesión</ion-label>
+          </ion-item>
+<!-- 
+          @for (label of labels; track label) {
+            <ion-item lines="none">
+              <ion-icon aria-hidden="true" slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
+              <ion-label>{{ label }}</ion-label>
+            </ion-item>
+          } -->
+        </ion-list>
+
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>
+
+<!-- Modal de Exportar a Excel -->
+<div *ngIf="showExportModal" class="custom-modal">
+  <div class="custom-modal-content">
+    <h2>Exportar consumos</h2>
+    <ion-item>
+      <ion-label position="stacked">ID Comedor</ion-label>
+      <ion-input [disabled]="this.authInfo != undefined && this.authInfo.TipoUsuario != 1" [(ngModel)]="idComedor"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="stacked">Fecha Inicio</ion-label>
+      <ion-input type="date" [(ngModel)]="fechaInicio"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="stacked">Fecha Fin</ion-label>
+      <ion-input type="date" [(ngModel)]="fechaFin"></ion-input>
+    </ion-item>
+    <div class="button-group">
+      <button class="large-button" (click)="closeModalExport()">Cancelar</button>
+      <button class="large-button primary-button" (click)="exportar()">Exportar</button>
+    </div>
+  </div>
+</div>

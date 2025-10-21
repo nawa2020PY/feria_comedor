@@ -1,0 +1,27 @@
+ion-refresher {
+    background-color:  #ffffff!important; /* Usa el color de fondo del tema */
+  }
+  
+  ion-refresher-content {
+    color: var(--ion-color-primary, #3880ff)!important; /* Usa el color primario del tema */
+    --pull-icon-color: var(--ion-color-primary, #3880ff)!important; /* Usa el color primario del tema */
+    --refreshing-spinner-color: var(--ion-color-primary, #3880ff)!important; /* Usa el color primario del tema */
+  }
+  
+  ion-refresher.ios {
+    --background: var(--ion-background-color, #ffffff); /* Usa el color de fondo del tema */
+  }
+  
+  .toolbar-container{
+    background-color: white! important;
+  }
+  
+  div.toolbar-container {
+    background-color: white !important;
+  }
+  
+  .toolbar-background {
+    background-color: white !important;
+  }
+  
+  

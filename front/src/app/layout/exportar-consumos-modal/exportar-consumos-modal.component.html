@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Exportar Consumos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="stacked">ID Comedor</ion-label>
+    <ion-input [disabled]="this.authInfo != undefined && this.authInfo.TipoUsuario != 1" [(ngModel)]="idComedor"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Fecha Inicio</ion-label>
+    <ion-input type="date" [(ngModel)]="fechaInicio"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Fecha Fin</ion-label>
+    <ion-input type="date" [(ngModel)]="fechaFin"></ion-input>
+  </ion-item>
+
+  <ion-button expand="full" color="primary" (click)="exportar()">Exportar</ion-button>
+</ion-content>

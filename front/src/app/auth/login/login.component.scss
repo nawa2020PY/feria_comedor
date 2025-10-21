@@ -1,0 +1,43 @@
+// .center-content {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   height: 100%; /* Asegúrate de que ocupe toda la altura */
+// }
+
+// .container{
+//   font-size: 18px;
+// }
+
+
+.screen .screen-row{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-card {
+  min-height: 30rem;
+  min-width: 22rem;
+}
+.image {
+  max-width: 11rem;
+  min-height: 5rem;
+}
+.image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.our-text {
+  font-size: 0.7rem;
+}
+
+.center-icon-passw{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-top: 32px
+}

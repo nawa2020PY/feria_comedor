@@ -1,0 +1,85 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+
+
+// body.backdrop-no-scroll {
+//     position: static !important; // o 'unset'
+//     overflow: auto !important;
+//   }
+  
+/* Potentially in global.scss or your menu component's SCSS */
+//Soluciona que el ion menu no te ande en mobile:
+ion-menu {
+    ion-content {
+      // Ensure ion-content itself is clickable within the menu
+      pointer-events: auto; 
+  
+      // Ensure all interactive elements within ion-content are clickable
+      ion-list {
+        pointer-events: auto;
+  
+        ion-item, ion-button {
+          pointer-events: auto;
+          // Optionally, give it a high z-index if you suspect an overlay issue
+          // z-index: 9999; 
+        }
+      }
+    }
+  }
+  
+  // If you suspect a specific component in your main-content is overlapping,
+  // you might need to adjust its z-index relative to the menu.
+  // This is less common if your menu is truly `type="overlay"`,
+  // but it's a possibility if there are modal-like elements or tooltips.
+
+.grey-text {
+    color: grey;
+}
+.primary-text {
+    color: #1cbbbb;
+}
+.icon-false {
+    color: rgb(168, 2, 2);
+}
+.icon-true {
+    color: rgb(16, 126, 16)
+}
+
+ion-menu,
+ion-toolbar {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 24px)! important; /* Asegura que el padding superior sea suficiente */
+}

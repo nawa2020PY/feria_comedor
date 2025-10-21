@@ -1,0 +1,170 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{idToEdit != 0 ? "Consumo a Editar" : "Nuevo Consumo"}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" >
+      <!-- <ng-container> -->
+        <form  *ngIf="!loadingData" [formGroup]="formDataConsumo" >
+          <ng-container *ngIf="!detailView">
+            <ion-button expand="full" type="submit" [disabled]="formDataConsumo.invalid" (click)="submitForm()">
+              Guardar
+            </ion-button>
+            <ion-button expand="full" color="medium" (click)="cancelNewConsumo()" style="margin-top: 16px;">
+              Cancelar
+            </ion-button>
+          </ng-container>
+          
+          <ng-container *ngIf="detailView && !editView && this.idToEdit > 0">
+            <!-- <ion-button expand="full" color="primary" [disabled]="formDataConsumo.get('anulado')?.value == true"  (click)="showEditView()" style="margin-top: 16px;">
+              Editar Consumo
+            </ion-button> -->
+            <ion-button [disabled]="formDataConsumo.get('anulado')?.value == true" expand="full" color="danger"  (click)="showEditView()" style="margin-top: 16px;">
+              Anular Consumo
+            </ion-button>
+          </ng-container>
+          <ng-container *ngIf="editView && this.idToEdit > 0">
+            <ion-button expand="full" color="danger" type="submit" [disabled]="formDataConsumo.invalid" (click)="onWarnAnularConsumo()">
+              Anular
+            </ion-button>
+            <ion-button expand="full" color="medium" (click)="showDetailView()" style="margin-top: 16px;">
+              Cancelar
+            </ion-button>
+          </ng-container>
+          <!-- anulado item: -->
+          <!-- <ion-item >
+            <ion-label position="stacked">Anulado</ion-label>
+            <ion-checkbox formControlName="anulado"></ion-checkbox>
+          </ion-item> -->
+
+          <ion-item>
+            <ion-label (click)="openDatePicker()" position="stacked">Fecha</ion-label>
+            <ion-datetime *ngIf="showDatePicker"
+            [firstDayOfWeek]="1"
+              formControlName="fecha"
+              displayFormat="YYYY-MM-DD"
+              presentation="date"
+              preferWheel="false">
+            </ion-datetime>
+
+            <!-- Preview of date: -->
+            <ion-note slot="end" class="bold-note" (click)="openDatePicker()">{{ formDataConsumo.get('fecha')?.value | date: 'yyyy-MM-dd' }}</ion-note>
+          </ion-item>
+      
+          <ion-item [class.invalid]="formDataConsumo.get('nroDocumento')?.invalid && formDataConsumo.get('nroDocumento')?.touched ">
+            <ion-label [class.invalid]="employeeNotFound" position="stacked">Nro de Cedula</ion-label>
+            <ion-input [class.invalid]="employeeNotFound" (ionBlur)="fillNameByDNI()" (keydown)="onEnterKey($event)" 
+            formControlName="nroDocumento" type="number"></ion-input>
+            <!-- <ion-text color="danger" *ngIf="formDataConsumo.get('nroDocumento')?.invalid && formDataConsumo.get('nroDocumento')?.touched">
+              <small>Este campo es obligatorio</small>
+            </ion-text> -->
+          </ion-item>
+      
+          <ion-item>
+            <ion-label position="stacked">Nombre</ion-label>
+            <ion-input formControlName="nombre" type="text"></ion-input>
+          </ion-item>
+
+          <ng-container *ngIf="this.authInfo != undefined && this.authInfo.TipoUsuario != 1; else editTemplate">
+            <ion-item [class.invalid]="formDataConsumo.get('idEmpleado')?.invalid && formDataConsumo.get('idEmpleado')?.touched">
+              <ion-label>Comedor:</ion-label>
+              <ion-input [(ngModel)]="actualComedorName" [ngModelOptions]="{standalone: true}" readonly> </ion-input>
+            </ion-item>
+          </ng-container>
+
+          <ng-template #editTemplate>
+            <ion-item  [class.invalid]="formDataConsumo.get('comedorID')?.invalid && formDataConsumo.get('comedorID')?.touched || employeeNotFound">
+              <ion-label>Comedor:</ion-label>
+              <ion-select formControlName="comedorID" interface="action-sheet">
+                <ion-select-option *ngFor="let opcion of comedores" [value]="opcion.comedorID">
+                  {{ opcion.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            </ng-template>
+          
+
+          <ion-item >
+            <ion-label position="stacked">Monto</ion-label>
+            <ion-input 
+              (ionBlur)="fillNameByDNI()"
+              formControlName="monto" 
+              type="number">
+            </ion-input>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label position="stacked">Tipo Consumo</ion-label>
+            <ion-radio-group formControlName="tipoConsumo" [disabled]="detailView">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-item lines="none" class="full-width-radio" (click)="selectTipoConsumo(1)">
+                      <ion-radio   [disabled]="detailView" slot="start" [value]="1"></ion-radio>
+                      <ion-label  class="small-label">En Local</ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-item lines="none" class="full-width-radio" (click)="selectTipoConsumo(2)">
+                      <ion-radio   [disabled]="detailView" slot="start" [value]="2"></ion-radio>
+                      <ion-label  class="small-label">Delivery</ion-label>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-radio-group>
+          </ion-item>
+          
+
+          <!-- CAMPOS EN VISTA EDICION  -->
+            <ng-container *ngIf="idToEdit != 0">
+              <ion-item>
+                <ion-label position="stacked">Auditoria</ion-label>
+                <ion-textarea  formControlName="observaciones"></ion-textarea>
+              </ion-item>
+              <ion-item style="margin-bottom: 16px;">
+                <ion-label position="stacked">Fecha Edición</ion-label>
+                <ion-note slot="end">{{ formDataConsumo.get('fechaEdicion')?.value | date: 'yyyy-MM-dd' }}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Usuario Edición</ion-label>
+                <ion-input formControlName="idUsuarioEdicion" type="text" readonly></ion-input>
+              </ion-item>
+            </ng-container>
+
+            <ion-item *ngIf="editView || idToEdit == 0 && this.authInfo != undefined && this.authInfo.TipoUsuario != 1"
+            >
+              <ion-label position="stacked">PIN de Autorización</ion-label>
+              <ion-input (ionBlur)="fillNameByDNI()" inputmode="numeric" maxlength="4" formControlName="pinAutorizacion" type="password"></ion-input>
+            </ion-item>
+        
+            <ion-item *ngIf="formDataConsumo.get('idConsumo')?.value">
+              <ion-label position="stacked">ID Consumo</ion-label>
+              <ion-input formControlName="idConsumo" type="number" readonly></ion-input>
+            </ion-item>
+            
+        </form>
+        
+      <!-- </ng-container> -->
+</ion-content>  
+
+
+<!-- Alerta simple -->
+<div *ngIf="showAlerta" class="custom-alert">
+  <div class="custom-alert-content">
+    <h2  style="color:black"> {{ alertTitle }}</h2>
+    <p style="color:black">{{ alertMessage }}</p>
+
+    <!-- Alerta simple con OK -->
+    <button *ngIf="!showConfirmButtons" (click)="closeAlert()">OK</button>
+
+    <!-- Confirmación con Cancelar y Aceptar -->
+    <div *ngIf="showConfirmButtons" class="button-group">
+      <button *ngIf="!omitCancel" (click)="onCancelClick()">Cancelar</button>
+      <button  (click)="onConfirmClick()">Aceptar</button>
+    </div>
+  </div>
+</div>

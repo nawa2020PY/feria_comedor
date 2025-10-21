@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{idToEdit != 0 ? "Comedor a Editar" : "Nuevo Comedor"}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Comedor</ion-title>
+        <ng-container *ngIf="!loadingData">
+          <form [formGroup]="formDataComedor" >
+            <ion-item [class.invalid]="formDataComedor.get('nombre')?.invalid && formDataComedor.get('nombre')?.touched">
+              <ion-label position="stacked">Nombre</ion-label>
+              <ion-input formControlName="nombre" type="text"></ion-input>
+              <!-- <ion-text color="danger" *ngIf="formDataComedor.get('nombre')?.invalid && formDataComedor.get('nombre')?.touched">
+                <small>Este campo es obligatorio</small>
+              </ion-text> -->
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Contacto</ion-label>
+              <ion-input formControlName="contacto" type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Teléfono</ion-label>
+              <ion-input formControlName="telefono" type="text"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Activo</ion-label>
+              <ion-checkbox formControlName="activo"></ion-checkbox>
+            </ion-item>
+
+            <ion-button expand="full" type="submit" [disabled]="formDataComedor.invalid" (click)="submitForm()">
+              Guardar
+            </ion-button>
+          </form>
+        </ng-container>
+    
+    </ion-toolbar>
+  </ion-header>
+
+</ion-content>
+
+

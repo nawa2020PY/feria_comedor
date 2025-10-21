@@ -1,0 +1,60 @@
+<ion-header [translucent]="true" style="background-color: white !important;">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Comedores</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense" style="margin-top:32px">
+    <ion-toolbar>
+      <ion-title size="large">Comedores</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <!-- TODO: Quitar este comentario cuando arregle el trigger al hacer el create de comedor (permisos comedor trigger) -->
+  <!-- <ion-item>
+    <ion-label position="stacked">Crear</ion-label>
+     <ion-button (click)="create()" expand="block" fill="outline" size="small" style="margin-top:16px;"><ion-icon name="add-outline"></ion-icon><strong>Nuevo Comedor</strong></ion-button>
+  </ion-item> -->
+  <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down-circle-outline"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+  <!-- <ion-item>
+    <ion-label position="stacked">Filtrar por Comedor</ion-label>
+    <ion-select [(ngModel)]="selectedComedor" (ionChange)="filterByComedor()" interface="popover">
+      <ion-select-option value="">Todos</ion-select-option>
+      <ion-select-option *ngFor="let comedor of comedores" [value]="comedor.IDComedor">
+        {{ comedor.Nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item> -->
+  <ion-list>
+    <ion-card *ngFor="let item of data">
+      <ion-card-header>
+        <!-- <ion-card-title>{{ item.NombreEmpleado }}</ion-card-title> -->
+        <ion-card-subtitle>{{ item.Nombre }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let key of keysToShow">
+          <p>
+            <ng-container *ngIf="key == 'Activo'; else defaultKey">
+              <strong>Activo:</strong> {{ item[key] ? 'Sí' : 'No' }}
+            </ng-container>
+            <ng-template #defaultKey>
+              <strong>{{ key | titlecase }}:</strong> {{ item[key] }}
+            </ng-template>
+          </p>
+        </div>
+        <p style="margin-top:16px">
+          <ion-button (click)="edit(item.IDComedor)" expand="block" fill="outline" size="small" style="margin-top:16px;"><ion-icon  name="create-outline"></ion-icon><strong>Editar</strong></ion-button>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  
+</ion-content>
+
